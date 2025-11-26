@@ -1,82 +1,90 @@
-body {
-    font-family: Arial, sans-serif;
-    background: linear-gradient(135deg, #3f0071, #a100ff);
-    margin: 0;
-    padding: 0;
-    color: #222;
-}
+function deg2rad(x){ return x * Math.PI/180; }
+function rad2deg(x){ return x * 180/Math.PI; }
 
-.container {
-    width: 90%;
-    max-width: 900px;
-    margin: 30px auto;
-    background: #fff;
-    border-radius: 20px;
-    padding: 30px;
-}
+document.getElementById("calc").onclick = function(){
 
-h1 {
-    text-align: center;
-    color: #4c0099;
-}
+    let d = +L1.value;
+    let a = +L2.value;
+    let b = +L3.value;
+    let c = +L4.value;
 
-.by {
-    text-align: center;
-    margin-top: -10px;
-    margin-bottom: 20px;
-    font-style: italic;
-}
+    let th2 = deg2rad(+theta2.value);
+    let w2  = +omega2.value;
+    let a2  = +alpha2.value;
 
-.inputs, .visual, .results {
-    background: #f4e2ff;
-    padding: 20px;
-    border-radius: 15px;
-    margin-top: 20px;
-}
+    // Solve position (θ3, θ4)
+    let A = d - a*Math.cos(th2);
+    let B = -2*a*Math.sin(th2);
+    let C = d - a*Math.cos(th2) - c;
 
-.grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 15px;
-}
+    let D = (A*A + B*B - b*b + c*c)/(2*c);
 
-label {
-    display: flex;
-    flex-direction: column;
-    font-weight: bold;
-}
+    let th4 = Math.atan2(-B, A-D);
+    let th3 = Math.atan2(a*Math.sin(th2) - c*Math.sin(th4),
+                         d - a*Math.cos(th2) - c*Math.cos(th4));
 
-input {
-    padding: 8px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-}
+    // Solve velocity
+    let det = (b*Math.cos(th3)*c*Math.sin(th4) - b*Math.sin(th3)*c*Math.cos(th4));
 
-button {
-    margin-top: 20px;
-    width: 100%;
-    padding: 12px;
-    background: #7b00e0;
-    color: #fff;
-    border: none;
-    font-size: 18px;
-    border-radius: 10px;
-    cursor: pointer;
-}
+    let w3 = ( c*w2*a*Math.cos(th2)*Math.sin(th4) - c*w2*a*Math.sin(th2)*Math.cos(th4) ) / det;
+    let w4 = ( b*w2*a*Math.cos(th2)*Math.sin(th3) - b*w2*a*Math.sin(th2)*Math.cos(th3) ) / det;
 
-button:hover {
-    background: #5d00aa;
-}
+    // Solve acceleration (2×2 linear system)
+    let A11 = -b*Math.sin(th3);
+    let A12 =  c*Math.sin(th4);
+    let A21 =  b*Math.cos(th3);
+    let A22 = -c*Math.cos(th4);
 
-.cards {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
+    let RHS1 = -a2*a*Math.sin(th2) - w2*w2*a*Math.cos(th2)
+               - w3*w3*b*Math.cos(th3) + w4*w4*c*Math.cos(th4);
 
-.card {
-    background: white;
-    padding: 15px;
-    border-radius: 12px;
-    border: 1px solid #e8ccff;
-}
+    let RHS2 =  a2*a*Math.cos(th2) - w2*w2*a*Math.sin(th2)
+               - w3*w3*b*Math.sin(th3) + w4*w4*c*Math.sin(th4);
+
+    let det2 = A11*A22 - A12*A21;
+
+    let a3 = (RHS1*A22 - RHS2*A12)/det2;
+    let a4 = (A11*RHS2 - A21*RHS1)/det2;
+
+    // Visualization
+    let O2 = {x:0, y:0};
+    let Apoint = {x: a*Math.cos(th2), y: a*Math.sin(th2)};
+    let O4 = {x:d, y:0};
+    let Bpoint = {x: O4.x + c*Math.cos(th4), y: c*Math.sin(th4)};
+
+    let svg = 
+    <svg width="400" height="250">
+        <line x1="${O2.x}" y1="${200-O2.y}"
+              x2="${Apoint.x}" y2="${200-Apoint.y}"
+              stroke="purple" stroke-width="4"/>
+        <line x1="${Apoint.x}" y1="${200-Apoint.y}"
+              x2="${Bpoint.x}" y2="${200-Bpoint.y}"
+              stroke="purple" stroke-width="4"/>
+        <line x1="${O2.x}" y1="${200-O2.y}"
+              x2="${O4.x}" y2="${200-O4.y}"
+              stroke="purple" stroke-width="4"/>
+        <line x1="${O4.x}" y1="${200-O4.y}"
+              x2="${Bpoint.x}" y2="${200-Bpoint.y}"
+              stroke="purple" stroke-width="4"/>
+
+        <circle cx="${O2.x}" cy="${200}" r="5" fill="black"/>
+        <circle cx="${Apoint.x}" cy="${200-Apoint.y}" r="5" fill="black"/>
+        <circle cx="${O4.x}" cy="${200}" r="5" fill="black"/>
+        <circle cx="${Bpoint.x}" cy="${200-Bpoint.y}" r="5" fill="black"/>
+    </svg>;
+
+    document.getElementById("svgContainer").innerHTML = svg;
+
+    // Display results
+    document.getElementById("results").innerHTML = 
+        <div class="card"><b>Angles:</b><br>
+            θ3 = ${rad2deg(th3).toFixed(2)}°<br>
+            θ4 = ${rad2deg(th4).toFixed(2)}°</div>
+        <div class="card"><b>Angular Velocities:</b><br>
+            ω3 = ${w3.toFixed(3)} rad/s<br>
+            ω4 = ${w4.toFixed(3)} rad/s</div>
+        <div class="card"><b>Angular Accelerations:</b><br>
+            α3 = ${a3.toFixed(3)} rad/s²<br>
+            α4 = ${a4.toFixed(3)} rad/s²</div>
+    ;
+};
