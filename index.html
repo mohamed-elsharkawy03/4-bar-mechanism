@@ -1,47 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Kinematic Analysis - Fourbar Linkage</title>
-    <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fourbar Linkage - Kinematic Analysis</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="container">
-        <h1>Kinematic Analysis for a Fourbar Linkage</h1>
-        <p class="by">By Mohamed Elsharkawy</p>
+<div class="container">
 
-        <section class="inputs">
-            <h2>Input Parameters</h2>
+    <h1>Fourbar Linkage – Kinematic Analysis</h1>
 
-            <div class="grid">
-                <label>L1 (d) mm <input id="L1" type="number" value="150"></label>
-                <label>L2 (a) mm <input id="L2" type="number" value="50"></label>
-                <label>L3 (b) mm <input id="L3" type="number" value="120"></label>
-                <label>L4 (c) mm <input id="L4" type="number" value="80"></label>
+    <section class="inputs">
+        <h2>Input Parameters</h2>
 
-                <label>θ2 (deg) <input id="theta2" type="number" value="45"></label>
-                <label>ω2 (rad/s) <input id="omega2" type="number" value="10"></label>
-                <label>α2 (rad/s²) <input id="alpha2" type="number" value="5"></label>
-            </div>
+        <div class="grid">
+            <label>L1 (d) <input id="L1" type="number" value="150"></label>
+            <label>L2 (a) <input id="L2" type="number" value="50"></label>
+            <label>L3 (b) <input id="L3" type="number" value="120"></label>
+            <label>L4 (c) <input id="L4" type="number" value="80"></label>
 
-            <button id="calc">Calculate & Visualize</button>
-        </section>
+            <label>θ2 (deg) <input id="theta2" type="number" value="45"></label>
+            <label>ω2 (rad/s) <input id="omega2" type="number" value="10"></label>
+            <label>α2 (rad/s²) <input id="alpha2" type="number" value="5"></label>
+        </div>
 
-        <section class="visual">
-            <h2>Mechanism Visualization</h2>
-            <div id="svgContainer"></div>
-        </section>
+        <button id="calc">Calculate & Visualize</button>
+    </section>
 
-        <section class="results">
-            <h2>Analysis Results</h2>
+    <section class="visual">
+        <h2>Mechanism Visualization</h2>
+        <div id="svgContainer"></div>
+    </section>
 
-            <div id="output" class="cards"></div>
-        </section>
+    <section class="results">
+        <h2>Results</h2>
+        <div id="results"></div>
+    </section>
 
-    </div>
+</div>
 
-    <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
