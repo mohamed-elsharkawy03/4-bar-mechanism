@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kinematic Analysis - Fourbar Linkage</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+    <div class="container">
+        <h1>Kinematic Analysis for a Fourbar Linkage</h1>
+        <p class="by">By Mohamed Elsharkawy</p>
+
+        <section class="inputs">
+            <h2>Input Parameters</h2>
+
+            <div class="grid">
+                <label>L1 (d) mm <input id="L1" type="number" value="150"></label>
+                <label>L2 (a) mm <input id="L2" type="number" value="50"></label>
+                <label>L3 (b) mm <input id="L3" type="number" value="120"></label>
+                <label>L4 (c) mm <input id="L4" type="number" value="80"></label>
+
+                <label>θ2 (deg) <input id="theta2" type="number" value="45"></label>
+                <label>ω2 (rad/s) <input id="omega2" type="number" value="10"></label>
+                <label>α2 (rad/s²) <input id="alpha2" type="number" value="5"></label>
+            </div>
+
+            <button id="calc">Calculate & Visualize</button>
+        </section>
+
+        <section class="visual">
+            <h2>Mechanism Visualization</h2>
+            <div id="svgContainer"></div>
+        </section>
+
+        <section class="results">
+            <h2>Analysis Results</h2>
+
+            <div id="output" class="cards"></div>
+        </section>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
